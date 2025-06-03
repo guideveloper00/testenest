@@ -4,11 +4,7 @@ import {
   BadRequestException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-
-export interface CreateTransactionInput {
-  amount: number;
-  timestamp: string;
-}
+import { CreateTransactionInput } from '../interfaces/create-transaction.interface';
 
 export class CreateTransactionUseCase {
   constructor(private readonly transactionRepository: TransactionRepository) {}
@@ -28,10 +24,7 @@ export class CreateTransactionUseCase {
       if (err.message === 'Invalid amount') {
         throw new BadRequestException(err.message);
       }
-      if (
-        err.message === 'Amount cannot be negative' ||
-        err.message === 'Transaction cannot be in the future'
-      ) {
+      if (err.message === 'Transaction cannot be in the future') {
         throw new UnprocessableEntityException(err.message);
       }
       if (err.message === 'Invalid timestamp') {
