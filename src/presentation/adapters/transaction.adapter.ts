@@ -21,7 +21,7 @@ export class TransactionAdapter {
 
   async createTransaction(dto: CreateTransactionDto): Promise<void> {
     await this.createTransactionUseCase.execute(dto);
-    // Emitir estatísticas atualizadas via WebSocket
+
     const stats = await this.statisticsAdapter.getStatistics();
     this.statisticsGateway.sendStatisticsUpdate(stats);
   }

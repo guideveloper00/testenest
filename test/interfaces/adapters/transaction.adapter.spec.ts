@@ -1,12 +1,12 @@
 import { InMemoryTransactionRepository } from '../../../src/infrastructure/repositories/in-memory-transaction.repository';
-import { TransactionAdapter } from '../../../src/interfaces/adapters/transaction.adapter';
-import { CreateTransactionDto } from '../../../src/interfaces/dtos/create-transaction.dto';
+import { TransactionAdapter } from '../../../src/presentation/adapters/transaction.adapter';
+import { CreateTransactionDto } from '../../../src/presentation/dtos/create-transaction.dto';
 import {
   UnprocessableEntityException,
   BadRequestException,
 } from '@nestjs/common';
-import { StatisticsAdapter } from '../../../src/interfaces/adapters/statistics.adapter';
-import { StatisticsGateway } from '../../../src/interfaces/gateways/statistics.gateway';
+import { StatisticsAdapter } from '../../../src/presentation/adapters/statistics.adapter';
+import { StatisticsGateway } from '../../../src/presentation/gateways/statistics.gateway';
 
 describe('TransactionAdapter', () => {
   let repo: InMemoryTransactionRepository;

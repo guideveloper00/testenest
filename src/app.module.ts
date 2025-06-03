@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { StatisticsGateway } from './interfaces/gateways/statistics.gateway';
-import { TransactionAdapter } from './interfaces/adapters/transaction.adapter';
+import { StatisticsGateway } from './presentation/gateways/statistics.gateway';
+import { TransactionAdapter } from './presentation/adapters/transaction.adapter';
 import { InMemoryTransactionRepository } from './infrastructure/repositories/in-memory-transaction.repository';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { TransactionController } from './interfaces/controllers/transaction.controller';
-import { StatisticsController } from './interfaces/controllers/statistics.controller';
-import { HealthController } from './interfaces/controllers/health.controller';
-import { StatisticsAdapter } from './interfaces/adapters/statistics.adapter';
+import { TransactionController } from './presentation/controllers/transaction.controller';
+import { StatisticsController } from './presentation/controllers/statistics.controller';
+import { HealthController } from './presentation/controllers/health.controller';
+import { StatisticsAdapter } from './presentation/adapters/statistics.adapter';
 import { LoggerModule } from 'nestjs-pino';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 

@@ -1,6 +1,6 @@
 import { TransactionRepository } from '../../domain/repositories/transaction.repository';
 import { Transaction } from '../../domain/entities/transaction.entity';
-import { CreateTransactionDto } from '../../interfaces/dtos/create-transaction.dto';
+import { CreateTransactionDto } from '../../presentation/dtos/create-transaction.dto';
 import {
   BadRequestException,
   UnprocessableEntityException,
