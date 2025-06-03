@@ -120,7 +120,11 @@ npm run build && npm run start
 
 ## Contato
 
-Dúvidas ou sugestões: abra uma issue ou PR.
+<a href="https://wa.me/5511982684198" target="_blank">
+  <img src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="WhatsApp" />
+</a>
+
+Dúvidas ou sugestões: (11) 98268-4198.
 
 ## Support
 
