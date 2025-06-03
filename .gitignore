@@ -1,0 +1,29 @@
+node_modules
+.env
+dist
+coverage
+.DS_Store
+*.log
+.idea
+.vscode
+*.local
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env.*
+/.output
+/.next
+/.turbo
+/.vercel
+/.cache
+
+# Docker
+*.pid
+
+# Test
+/jest-*.json
+/coverage/
+
+# OS
+Thumbs.db
