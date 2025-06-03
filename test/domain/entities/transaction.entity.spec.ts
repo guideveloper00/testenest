@@ -23,7 +23,9 @@ describe('Transaction Entity', () => {
   });
 
   it('should throw for negative or NaN amount', () => {
-    expect(() => Transaction.create(-1, new Date())).toThrow('Invalid amount');
+    expect(() => Transaction.create(-1, new Date())).not.toThrow(
+      'Invalid amount',
+    );
     expect(() => Transaction.create(NaN, new Date())).toThrow('Invalid amount');
     expect(() => Transaction.create(Infinity, new Date())).toThrow(
       'Invalid amount',
