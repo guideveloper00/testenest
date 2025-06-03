@@ -39,8 +39,9 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
     },
     {
       provide: TransactionAdapter,
-      useFactory: (repo) => new TransactionAdapter(repo),
-      inject: ['TransactionRepository'],
+      useFactory: (repo, statsAdapter, statsGateway) =>
+        new TransactionAdapter(repo, statsAdapter, statsGateway),
+      inject: ['TransactionRepository', StatisticsAdapter, StatisticsGateway],
     },
     {
       provide: StatisticsAdapter,

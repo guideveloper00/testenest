@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InMemoryTransactionRepository } from '../../infrastructure/repositories/in-memory-transaction.repository';
-import { Transaction } from '../../domain/entities/transaction.entity';
-
 @Injectable()
 export class StatisticsAdapter {
   constructor(
@@ -9,10 +7,7 @@ export class StatisticsAdapter {
   ) {}
 
   async getStatistics() {
-    const now = Date.now();
-    const transactions = (await this.transactionRepository.findAll()).filter(
-      (t: Transaction) => now - t.getTimestamp().getTime() <= 60000,
-    );
+    const transactions = await this.transactionRepository.findAll();
     const count = transactions.length;
     const sum = transactions.reduce((acc, t) => acc + t.getAmount(), 0);
     const avg = count > 0 ? sum / count : 0;

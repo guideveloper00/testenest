@@ -5,6 +5,7 @@ import {
   Body,
   HttpCode,
   HttpStatus,
+  Get,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger';
 import { CreateTransactionDto } from '../dtos/create-transaction.dto';
@@ -45,5 +46,21 @@ export class TransactionController {
   async deleteAll() {
     await this.transactionAdapter.deleteAllTransactions();
     return;
+  }
+
+  @Get('all')
+  @ApiOperation({ summary: 'Lista todas as transações registradas' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de todas as transações',
+    schema: {
+      example: [
+        { amount: 100.5, timestamp: '2025-06-03T12:00:00.000Z' },
+        { amount: 50, timestamp: '2025-06-03T12:01:00.000Z' },
+      ],
+    },
+  })
+  async getAll() {
+    return await this.transactionAdapter.getAllTransactions();
   }
 }

@@ -5,14 +5,24 @@ import {
   UnprocessableEntityException,
   BadRequestException,
 } from '@nestjs/common';
+import { StatisticsAdapter } from '../../../src/interfaces/adapters/statistics.adapter';
+import { StatisticsGateway } from '../../../src/interfaces/gateways/statistics.gateway';
 
 describe('TransactionAdapter', () => {
   let repo: InMemoryTransactionRepository;
+  let statsAdapter: StatisticsAdapter;
+  let statsGateway: StatisticsGateway;
   let adapter: TransactionAdapter;
 
   beforeEach(() => {
     repo = new InMemoryTransactionRepository();
-    adapter = new TransactionAdapter(repo);
+    statsAdapter = {
+      getStatistics: jest.fn().mockResolvedValue({}),
+    } as any;
+    statsGateway = {
+      sendStatisticsUpdate: jest.fn(),
+    } as any;
+    adapter = new TransactionAdapter(repo, statsAdapter, statsGateway);
   });
 
   it('should add a valid transaction', async () => {
