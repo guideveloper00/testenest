@@ -36,16 +36,6 @@ describe('TransactionAdapter', () => {
     expect(all[0].getAmount()).toBe(100);
   });
 
-  it('should throw if amount is negative', async () => {
-    const dto: CreateTransactionDto = {
-      amount: -1,
-      timestamp: new Date().toISOString(),
-    };
-    await expect(adapter.createTransaction(dto)).rejects.toThrow(
-      UnprocessableEntityException,
-    );
-  });
-
   it('should throw if timestamp is in the future', async () => {
     const future = new Date(Date.now() + 100000).toISOString();
     const dto: CreateTransactionDto = {

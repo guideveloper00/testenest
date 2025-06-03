@@ -26,17 +26,13 @@ export class Transaction {
     this.amount = newAmount;
   }
 
-  updateTimestamp(newTimestamp: Date): void {
-    if (!(newTimestamp instanceof Date) || isNaN(newTimestamp.getTime())) {
-      throw new Error('Invalid timestamp');
+  static create(amount: number, timestamp: Date) {
+    if (typeof amount !== 'number' || isNaN(amount) || !isFinite(amount)) {
+      throw new Error('Invalid amount');
     }
-    if (newTimestamp.getTime() > Date.now()) {
+    if (timestamp.getTime() > Date.now()) {
       throw new Error('Transaction cannot be in the future');
     }
-    this.timestamp = newTimestamp;
-  }
-
-  static create(amount: number, timestamp: Date) {
     return new Transaction(amount, timestamp);
   }
 }

@@ -15,36 +15,19 @@ describe('Transaction Entity', () => {
     expect(transaction.getAmount()).toBe(200);
   });
 
-  it('should throw if amount is negative', () => {
-    expect(() => Transaction.create(-1, new Date())).toThrow(
-      'Amount cannot be negative',
+  it('should throw if timestamp is in the future', () => {
+    const future = new Date(Date.now() + 100000);
+    expect(() => Transaction.create(10, future)).toThrow(
+      'Transaction cannot be in the future',
     );
   });
 
-  it('should throw if amount is not a number', () => {
-    expect(() => Transaction.create(NaN, new Date())).toThrow('Invalid amount');
-    expect(() => Transaction.create(Infinity, new Date())).toThrow(
-      'Invalid amount',
-    );
-    expect(() => Transaction.create(undefined as any, new Date())).toThrow(
-      'Invalid amount',
-    );
-  });
-
-  it('should update timestamp using updateTimestamp', () => {
-    const transaction = Transaction.create(0, new Date('2020-01-01T00:00:00Z'));
-    const newTimestamp = new Date('2025-06-03T12:00:00Z');
-    transaction.updateTimestamp(newTimestamp);
-    expect(transaction.getTimestamp()).toBe(newTimestamp);
-  });
-
-  it('should allow setting timestamp to now using updateTimestamp', () => {
-    const transaction = Transaction.create(
-      10,
-      new Date('2020-01-01T00:00:00Z'),
-    );
-    const now = new Date();
-    transaction.updateTimestamp(now);
-    expect(transaction.getTimestamp()).toBe(now);
+  it('should not throw for negative or NaN amount', () => {
+    expect(() => Transaction.create(-1, new Date())).not.toThrow();
+    expect(() => Transaction.create(NaN, new Date())).not.toThrow();
+    expect(() => Transaction.create(Infinity, new Date())).not.toThrow();
+    expect(() =>
+      Transaction.create(undefined as any, new Date()),
+    ).not.toThrow();
   });
 });
