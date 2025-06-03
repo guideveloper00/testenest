@@ -22,12 +22,11 @@ describe('Transaction Entity', () => {
     );
   });
 
-  it('should not throw for negative or NaN amount', () => {
-    expect(() => Transaction.create(-1, new Date())).not.toThrow();
-    expect(() => Transaction.create(NaN, new Date())).not.toThrow();
-    expect(() => Transaction.create(Infinity, new Date())).not.toThrow();
-    expect(() =>
-      Transaction.create(undefined as any, new Date()),
-    ).not.toThrow();
+  it('should throw for negative or NaN amount', () => {
+    expect(() => Transaction.create(-1, new Date())).toThrow('Invalid amount');
+    expect(() => Transaction.create(NaN, new Date())).toThrow('Invalid amount');
+    expect(() => Transaction.create(Infinity, new Date())).toThrow(
+      'Invalid amount',
+    );
   });
 });
