@@ -103,11 +103,11 @@ npm run build && npm run start
 ## Observabilidade
 
 - Logs estruturados: nestjs-pino
-- Prometheus: `docker-compose up -d` para subir stack de métricas
+- Prometheus/Grafana: `docker-compose up -d` para subir stack de métricas
 
-## WebSocket
+## WebSocket (Estatísticas em tempo real)
 
-- Estatísticas em tempo real via WebSocket em `/statistics`
+- node test-socket.js
 
 ## CI/CD
 
