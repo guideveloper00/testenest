@@ -1,39 +1,44 @@
 import { TransactionRepository } from '../../domain/repositories/transaction.repository';
 import { Transaction } from '../../domain/entities/transaction.entity';
-import { CreateTransactionDto } from '../../presentation/dtos/create-transaction.dto';
 import {
   BadRequestException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 
+export interface CreateTransactionInput {
+  amount: number;
+  timestamp: string;
+}
+
 export class CreateTransactionUseCase {
   constructor(private readonly transactionRepository: TransactionRepository) {}
 
-  async execute(dto: CreateTransactionDto): Promise<void> {
-    if (
-      typeof dto.amount !== 'number' ||
-      isNaN(dto.amount) ||
-      !isFinite(dto.amount)
-    ) {
-      throw new BadRequestException('Invalid amount');
-    }
-    if (dto.amount < 0) {
-      throw new UnprocessableEntityException('Amount cannot be negative');
-    }
+  async execute(input: CreateTransactionInput): Promise<void> {
     let date: Date;
     try {
-      date = new Date(dto.timestamp);
+      date = new Date(input.timestamp);
       if (isNaN(date.getTime())) throw new Error();
     } catch {
       throw new BadRequestException('Invalid timestamp');
     }
-    const now = Date.now();
-    if (date.getTime() > now) {
-      throw new UnprocessableEntityException(
-        'Transaction cannot be in the future',
-      );
+    let transaction: Transaction;
+    try {
+      transaction = Transaction.create(input.amount, date);
+    } catch (err: any) {
+      if (err.message === 'Invalid amount') {
+        throw new BadRequestException(err.message);
+      }
+      if (
+        err.message === 'Amount cannot be negative' ||
+        err.message === 'Transaction cannot be in the future'
+      ) {
+        throw new UnprocessableEntityException(err.message);
+      }
+      if (err.message === 'Invalid timestamp') {
+        throw new BadRequestException(err.message);
+      }
+      throw err;
     }
-    const transaction = new Transaction(dto.amount, date);
     await this.transactionRepository.add(transaction);
   }
 }
