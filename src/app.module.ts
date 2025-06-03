@@ -7,25 +7,46 @@ import { TransactionController } from './interfaces/controllers/transaction.cont
 import { StatisticsController } from './interfaces/controllers/statistics.controller';
 import { HealthController } from './interfaces/controllers/health.controller';
 import { StatisticsAdapter } from './interfaces/adapters/statistics.adapter';
+import { LoggerModule } from 'nestjs-pino';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
+    LoggerModule.forRoot(
+      process.env.NODE_ENV === 'development'
+        ? {
+            pinoHttp: {
+              transport: {
+                target: 'pino-pretty',
+                options: { colorize: true },
+              },
+            },
+          }
+        : {},
+    ),
+    PrometheusModule.register(),
     ThrottlerModule.forRoot({
-      throttlers: [
-        {
-          name: 'global',
-          limit: 10,
-          ttl: 60,
-        },
-      ],
+      ttl: 60,
+      limit: 10,
     }),
   ],
   controllers: [TransactionController, StatisticsController, HealthController],
   providers: [
     StatisticsGateway,
-    InMemoryTransactionRepository,
-    TransactionAdapter,
-    StatisticsAdapter,
+    {
+      provide: 'TransactionRepository',
+      useClass: InMemoryTransactionRepository,
+    },
+    {
+      provide: TransactionAdapter,
+      useFactory: (repo) => new TransactionAdapter(repo),
+      inject: ['TransactionRepository'],
+    },
+    {
+      provide: StatisticsAdapter,
+      useFactory: (repo) => new StatisticsAdapter(repo),
+      inject: ['TransactionRepository'],
+    },
   ],
 })
 export class AppModule {}

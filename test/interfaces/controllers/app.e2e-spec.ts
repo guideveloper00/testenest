@@ -72,4 +72,13 @@ describe('AppController (e2e)', () => {
       expect(res.body).toHaveProperty('status');
     });
   });
+
+  describe('/metrics (GET)', () => {
+    it('should return prometheus metrics in text format', async () => {
+      const res = await request(app.getHttpServer()).get('/metrics');
+      expect(res.status).toBe(200);
+      expect(res.headers['content-type']).toContain('text/plain');
+      expect(res.text).toContain('process_cpu_user_seconds_total');
+    });
+  });
 });
