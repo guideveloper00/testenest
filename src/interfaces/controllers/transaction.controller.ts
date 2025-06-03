@@ -21,7 +21,7 @@ export class TransactionController {
   }
 
   @Delete()
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async deleteAll() {
     await this.transactionAdapter.deleteAllTransactions();
     return;

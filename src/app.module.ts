@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { StatisticsGateway } from './interfaces/gateways/statistics.gateway';
 import { TransactionAdapter } from './interfaces/adapters/transaction.adapter';
 import { InMemoryTransactionRepository } from './infrastructure/repositories/in-memory-transaction.repository';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { TransactionController } from './interfaces/controllers/transaction.controller';
+import { StatisticsController } from './interfaces/controllers/statistics.controller';
+import { HealthController } from './interfaces/controllers/health.controller';
+import { StatisticsAdapter } from './interfaces/adapters/statistics.adapter';
 
 @Module({
   imports: [
@@ -18,12 +20,12 @@ import { ThrottlerModule } from '@nestjs/throttler';
       ],
     }),
   ],
-  controllers: [AppController],
+  controllers: [TransactionController, StatisticsController, HealthController],
   providers: [
-    AppService,
     StatisticsGateway,
     InMemoryTransactionRepository,
     TransactionAdapter,
+    StatisticsAdapter,
   ],
 })
 export class AppModule {}

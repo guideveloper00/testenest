@@ -1,0 +1,75 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+import * as request from 'supertest';
+import { AppModule } from '../../../src/app.module';
+import { AllExceptionsFilter } from '../../../src/interfaces/adapters/all-exceptions.filter';
+
+const validTransaction = () => ({
+  amount: 100.5,
+  timestamp: new Date().toISOString(),
+});
+
+describe('AppController (e2e)', () => {
+  let app: INestApplication;
+
+  beforeAll(async () => {
+    console.log('DEBUG: beforeAll starting');
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(
+      new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
+    );
+    app.useGlobalFilters(new AllExceptionsFilter());
+    await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
+  });
+
+  describe('/transactions (POST)', () => {
+    it('should create a transaction and return 201 or 204', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/transactions')
+        .send(validTransaction());
+      expect([201, 204]).toContain(res.status);
+    });
+
+    it('should return 400 for invalid body', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/transactions')
+        .send({ amount: 'invalid', timestamp: 'invalid' });
+      expect(res.status).toBe(400);
+    });
+  });
+
+  describe('/transactions (DELETE)', () => {
+    it('should delete all transactions and return 204', async () => {
+      const res = await request(app.getHttpServer()).delete('/transactions');
+      expect(res.status).toBe(204);
+    });
+  });
+
+  describe('/statistics (GET)', () => {
+    it('should return statistics with required fields', async () => {
+      const res = await request(app.getHttpServer()).get('/statistics');
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty('sum');
+      expect(res.body).toHaveProperty('avg');
+      expect(res.body).toHaveProperty('max');
+      expect(res.body).toHaveProperty('min');
+      expect(res.body).toHaveProperty('count');
+    });
+  });
+
+  describe('/health (GET)', () => {
+    it('should return health status', async () => {
+      const res = await request(app.getHttpServer()).get('/health');
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty('status');
+    });
+  });
+});

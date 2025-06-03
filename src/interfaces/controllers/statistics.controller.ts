@@ -1,16 +1,13 @@
 import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
+import { StatisticsAdapter } from '../adapters/statistics.adapter';
 
 @Controller('statistics')
 export class StatisticsController {
+  constructor(private readonly statisticsAdapter: StatisticsAdapter) {}
+
   @Get()
   @HttpCode(HttpStatus.OK)
   async getStatistics() {
-    return {
-      count: 0,
-      sum: 0,
-      avg: 0,
-      min: 0,
-      max: 0,
-    };
+    return await this.statisticsAdapter.getStatistics();
   }
 }
