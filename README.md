@@ -95,7 +95,7 @@ Ajuste as variáveis conforme necessário.
 - Logs estruturados: nestjs-pino
 - Prometheus/Grafana: `docker-compose up -d` para subir stack de métricas
 - localhost:9090 Prometheus
-- localhost:3000/api/metrics Grafana
+- localhost:3001 Grafana
 
 ## WebSocket (Estatísticas em tempo real)
 
