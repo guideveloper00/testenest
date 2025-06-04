@@ -64,6 +64,10 @@ Ajuste as variáveis conforme necessário.
 - Grafana: http://localhost:3001
 - WebSocket: logado no terminal do container websocket-client
 
+- Grafana
+- Login: admin
+- Senha: testenest
+
 ### Testes
 
 - Unitários e integração:

@@ -1,4 +1,4 @@
-import { IsDate, IsNumber, Min } from 'class-validator';
+import { IsDate, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
@@ -6,10 +6,8 @@ export class CreateTransactionDto {
   @ApiProperty({
     example: 100.5,
     description: 'Valor da transação',
-    minimum: 0,
   })
   @IsNumber({ allowNaN: false, allowInfinity: false })
-  @Min(0)
   amount: number;
 
   @ApiProperty({
