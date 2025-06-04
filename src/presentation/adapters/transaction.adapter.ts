@@ -8,6 +8,11 @@ import { CreateTransactionUseCase } from '../../application/use-cases/create-tra
 import { CreateTransactionDto } from '../dtos/create-transaction.dto';
 import { StatisticsAdapter } from './statistics.adapter';
 import { IStatisticsGateway } from '../../infrastructure/types/statistics-gateway';
+import {
+  InvalidAmountError,
+  FutureTransactionError,
+  InvalidTimestampError,
+} from '../../domain/errors/transaction.errors';
 
 @Injectable()
 export class TransactionAdapter {
@@ -25,20 +30,27 @@ export class TransactionAdapter {
 
   async createTransaction(dto: CreateTransactionDto) {
     try {
+      const timestamp =
+        typeof dto.timestamp === 'string'
+          ? new Date(dto.timestamp)
+          : dto.timestamp;
       const result = await this.createTransactionUseCase.execute({
         amount: dto.amount,
-        timestamp: dto.timestamp,
+        timestamp,
       });
       await this.sendStatisticsUpdate();
       return result;
     } catch (err: any) {
-      if (err.message === 'Invalid amount') {
+      if (err instanceof InvalidAmountError) {
         throw new BadRequestException(err.message);
       }
-      if (err.message === 'Transaction cannot be in the future') {
+      if (err instanceof FutureTransactionError) {
         throw new UnprocessableEntityException(err.message);
       }
-      throw err;
+      if (err instanceof InvalidTimestampError) {
+        throw new BadRequestException(err.message);
+      }
+      throw new BadRequestException('Unexpected error in transaction creation');
     }
   }
 

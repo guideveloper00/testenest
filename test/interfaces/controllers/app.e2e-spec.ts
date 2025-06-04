@@ -6,7 +6,7 @@ import { AllExceptionsFilter } from '../../../src/presentation/adapters/all-exce
 
 const validTransaction = () => ({
   amount: 100.5,
-  timestamp: new Date().toISOString(),
+  timestamp: new Date(Date.now() - 5000).toISOString(),
 });
 
 describe('AppController (e2e)', () => {
@@ -31,11 +31,16 @@ describe('AppController (e2e)', () => {
   });
 
   describe('/transactions (POST)', () => {
-    it('should create a transaction and return 201 or 204', async () => {
+    it('should create a transaction and return 201 with the created object', async () => {
+      const payload = validTransaction();
       const res = await request(app.getHttpServer())
         .post('/transactions')
-        .send(validTransaction());
-      expect([201, 204]).toContain(res.status);
+        .send(payload);
+      expect(res.status).toBe(201);
+      expect(res.body).toHaveProperty('amount', payload.amount);
+      expect(new Date(res.body.timestamp).toISOString()).toBe(
+        new Date(payload.timestamp).toISOString(),
+      );
     });
 
     it('should return 400 for invalid body', async () => {

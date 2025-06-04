@@ -1,3 +1,9 @@
+import {
+  InvalidAmountError,
+  FutureTransactionError,
+  InvalidTimestampError,
+} from '../errors/transaction.errors';
+
 export class Transaction {
   private amount: number;
   private timestamp: Date;
@@ -21,17 +27,20 @@ export class Transaction {
       isNaN(newAmount) ||
       !isFinite(newAmount)
     ) {
-      throw new Error('Invalid amount');
+      throw new InvalidAmountError();
     }
     this.amount = newAmount;
   }
 
   static create(amount: number, timestamp: Date) {
     if (typeof amount !== 'number' || isNaN(amount) || !isFinite(amount)) {
-      throw new Error('Invalid amount');
+      throw new InvalidAmountError();
+    }
+    if (!(timestamp instanceof Date) || isNaN(timestamp.getTime())) {
+      throw new InvalidTimestampError();
     }
     if (timestamp.getTime() > Date.now()) {
-      throw new Error('Transaction cannot be in the future');
+      throw new FutureTransactionError();
     }
     return new Transaction(amount, timestamp);
   }

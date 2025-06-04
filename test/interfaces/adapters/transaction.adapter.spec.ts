@@ -30,7 +30,11 @@ describe('TransactionAdapter', () => {
       amount: 100,
       timestamp: new Date(),
     };
-    await expect(adapter.createTransaction(dto)).resolves.toBeUndefined();
+    const result = await adapter.createTransaction(dto);
+    expect(result).toMatchObject({
+      amount: 100,
+      timestamp: expect.any(Date),
+    });
     const all = await repo.findAll();
     expect(all.length).toBe(1);
     expect(all[0].getAmount()).toBe(100);
