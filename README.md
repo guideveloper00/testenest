@@ -57,22 +57,12 @@ Ajuste as variáveis conforme necessário.
 
 ## Execução
 
-### Desenvolvimento
+- docker-compose up --build
 
-```bash
-pnpm start:dev
-# ou
-npm run start:dev
-```
-
-### Produção
-
-```bash
-pnpm build
-pnpm start
-# ou
-npm run build && npm run start
-```
+- API/Swagger: http://localhost:3000/api/docs
+- Prometheus: http://localhost:9090
+- Grafana: http://localhost:3001
+- WebSocket: logado no terminal do container websocket-client
 
 ### Testes
 
@@ -104,10 +94,12 @@ npm run build && npm run start
 
 - Logs estruturados: nestjs-pino
 - Prometheus/Grafana: `docker-compose up -d` para subir stack de métricas
+- localhost:9090 Prometheus
+- localhost:3000/api/metrics Grafana
 
 ## WebSocket (Estatísticas em tempo real)
 
-- node test-socket.js
+- node test-socket.mjs
 
 ## CI/CD
 

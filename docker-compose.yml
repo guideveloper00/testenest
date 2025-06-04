@@ -22,6 +22,19 @@ services:
     image: grafana/grafana:latest
     ports:
       - '3001:3000'
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=testenest
+    networks:
+      - monitor-net
+  websocket-client:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: ['node', 'test-socket.mjs']
+    depends_on:
+      - app
     networks:
       - monitor-net
 networks:

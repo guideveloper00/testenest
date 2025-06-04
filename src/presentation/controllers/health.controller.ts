@@ -1,16 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { CustomSwaggerDecorator } from '../decorators/custom-swagger.decorator';
+import { getHealthSwagger } from './mocks/swagger-health.mock';
 
 @ApiTags('Health')
 @Controller('health')
 export class HealthController {
   @Get()
-  @ApiOperation({ summary: 'Verifica o status da aplicação' })
-  @ApiResponse({
-    status: 200,
-    description: 'Aplicação saudável',
-    schema: { example: { status: 'ok' } },
-  })
+  @CustomSwaggerDecorator(getHealthSwagger)
+  @HttpCode(HttpStatus.OK)
   health() {
     return { status: 'ok' };
   }
