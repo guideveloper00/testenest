@@ -43,6 +43,7 @@ describe('AppController (e2e)', () => {
       expect(res.status).toBe(201);
       expect(res.body).toHaveProperty('amount', payload.amount);
       expect(typeof res.body.timestamp).toBe('string');
+      expect(typeof res.body.id).toBe('string');
     });
 
     it('should return 400 for invalid body', async () => {

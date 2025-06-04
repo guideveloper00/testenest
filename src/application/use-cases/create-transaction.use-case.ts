@@ -21,6 +21,7 @@ export class CreateTransactionUseCase {
     return {
       amount: transaction.amount,
       timestamp: transaction.timestamp.toISOString(),
+      id: transaction.uuid,
     };
   }
 }
