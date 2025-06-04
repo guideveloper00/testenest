@@ -5,5 +5,5 @@ export type ICreateTransactionInput = {
 
 export type ICreateTransactionOutput = {
   amount: number;
-  timestamp: Date;
+  timestamp: string;
 };

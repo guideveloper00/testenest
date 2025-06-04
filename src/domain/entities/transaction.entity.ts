@@ -5,20 +5,20 @@ import {
 } from '../errors/transaction.errors';
 
 export class Transaction {
-  private amount: number;
-  private timestamp: Date;
+  private _amount: number;
+  private _timestamp: Date;
 
   private constructor(amount: number, timestamp: Date) {
-    this.amount = amount;
-    this.timestamp = timestamp;
+    this._amount = amount;
+    this._timestamp = timestamp;
   }
 
-  get amountValue(): number {
-    return this.amount;
+  get amount(): number {
+    return this._amount;
   }
 
-  get timestampValue(): Date {
-    return this.timestamp;
+  get timestamp(): Date {
+    return this._timestamp;
   }
 
   updateAmount(newAmount: number): void {
@@ -29,7 +29,7 @@ export class Transaction {
     ) {
       throw new InvalidAmountError();
     }
-    this.amount = newAmount;
+    this._amount = newAmount;
   }
 
   static create(amount: number, timestamp: Date) {

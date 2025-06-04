@@ -38,10 +38,7 @@ export class TransactionController {
   async create(@Body() dto: CreateTransactionDto) {
     const input: ICreateTransactionInput = {
       amount: dto.amount,
-      timestamp:
-        typeof dto.timestamp === 'string'
-          ? new Date(dto.timestamp)
-          : dto.timestamp,
+      timestamp: dto.timestamp,
     };
     return await this.transactionAdapter.createTransaction(input);
   }

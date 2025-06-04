@@ -33,11 +33,11 @@ describe('TransactionAdapter', () => {
     const result = await adapter.createTransaction(dto);
     expect(result).toMatchObject({
       amount: 100,
-      timestamp: expect.any(Date),
+      timestamp: expect.any(String),
     });
     const all = await repo.findAll();
     expect(all.length).toBe(1);
-    expect(all[0].amountValue).toBe(100);
+    expect(all[0].amount).toBe(100);
   });
 
   it('should throw if timestamp is in the future', async () => {
