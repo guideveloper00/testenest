@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { TransactionRepository } from '../../domain/repositories/transaction.repository';
 import { CreateTransactionUseCase } from '../../application/use-cases/create-transaction.use-case';
 import { CreateTransactionDto } from '../dtos/create-transaction.dto';
@@ -20,14 +24,23 @@ export class TransactionAdapter {
   }
 
   async createTransaction(dto: CreateTransactionDto) {
-    const result = await this.createTransactionUseCase.execute({
-      amount: dto.amount,
-      timestamp: dto.timestamp,
-    });
-
-    const stats = await this.statisticsAdapter.getStatistics();
-    this.statisticsGateway.sendStatisticsUpdate(stats);
-    return result;
+    try {
+      const result = await this.createTransactionUseCase.execute({
+        amount: dto.amount,
+        timestamp: dto.timestamp,
+      });
+      const stats = await this.statisticsAdapter.getStatistics();
+      this.statisticsGateway.sendStatisticsUpdate(stats);
+      return result;
+    } catch (err: any) {
+      if (err.message === 'Invalid amount') {
+        throw new BadRequestException(err.message);
+      }
+      if (err.message === 'Transaction cannot be in the future') {
+        throw new UnprocessableEntityException(err.message);
+      }
+      throw err;
+    }
   }
 
   async deleteAllTransactions(): Promise<void> {

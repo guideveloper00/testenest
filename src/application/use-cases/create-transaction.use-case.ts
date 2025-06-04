@@ -1,10 +1,6 @@
 import { TransactionRepository } from '../../domain/repositories/transaction.repository';
 import { Transaction } from '../../domain/entities/transaction.entity';
 import {
-  BadRequestException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
-import {
   CreateTransactionInput,
   CreateTransactionOutput,
 } from '../types/create-transaction.type';
@@ -15,32 +11,16 @@ export class CreateTransactionUseCase {
   async execute(
     input: CreateTransactionInput,
   ): Promise<CreateTransactionOutput> {
-    let date: Date;
-    try {
-      date = new Date(input.timestamp);
-      if (isNaN(date.getTime())) throw new Error();
-    } catch {
-      throw new BadRequestException('Invalid timestamp');
-    }
     let transaction: Transaction;
     try {
-      transaction = Transaction.create(input.amount, date);
+      transaction = Transaction.create(input.amount, input.timestamp);
     } catch (err: any) {
-      if (err.message === 'Invalid amount') {
-        throw new BadRequestException(err.message);
-      }
-      if (err.message === 'Transaction cannot be in the future') {
-        throw new UnprocessableEntityException(err.message);
-      }
-      if (err.message === 'Invalid timestamp') {
-        throw new BadRequestException(err.message);
-      }
       throw err;
     }
     await this.transactionRepository.add(transaction);
     return {
       amount: transaction.getAmount(),
-      timestamp: transaction.getTimestamp().toISOString(),
+      timestamp: transaction.getTimestamp(),
     };
   }
 }

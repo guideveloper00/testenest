@@ -16,5 +16,5 @@ export class CreateTransactionDto {
     description: 'Data/hora da transação em formato ISO8601',
   })
   @IsISO8601()
-  timestamp: string;
+  timestamp: Date;
 }

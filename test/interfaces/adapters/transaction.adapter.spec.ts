@@ -28,7 +28,7 @@ describe('TransactionAdapter', () => {
   it('should add a valid transaction', async () => {
     const dto: CreateTransactionDto = {
       amount: 100,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date(),
     };
     await expect(adapter.createTransaction(dto)).resolves.toBeUndefined();
     const all = await repo.findAll();
@@ -37,7 +37,7 @@ describe('TransactionAdapter', () => {
   });
 
   it('should throw if timestamp is in the future', async () => {
-    const future = new Date(Date.now() + 100000).toISOString();
+    const future = new Date(Date.now() + 100000);
     const dto: CreateTransactionDto = {
       amount: 10,
       timestamp: future,
@@ -50,7 +50,7 @@ describe('TransactionAdapter', () => {
   it('should throw if amount is not a number', async () => {
     const dto: any = {
       amount: 'abc',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date(),
     };
     await expect(adapter.createTransaction(dto)).rejects.toThrow(
       BadRequestException,
@@ -60,7 +60,7 @@ describe('TransactionAdapter', () => {
   it('should throw if timestamp is invalid', async () => {
     const dto: CreateTransactionDto = {
       amount: 10,
-      timestamp: 'invalid-date',
+      timestamp: 'invalid-date' as any,
     };
     await expect(adapter.createTransaction(dto)).rejects.toThrow(
       BadRequestException,
@@ -70,7 +70,7 @@ describe('TransactionAdapter', () => {
   it('should clear all transactions', async () => {
     await adapter.createTransaction({
       amount: 1,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date(),
     });
     await adapter.deleteAllTransactions();
     const all = await repo.findAll();
