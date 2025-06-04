@@ -88,7 +88,7 @@ Ajuste as variáveis conforme necessário.
 ## Documentação
 
 - Swagger: [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
-- Métricas Prometheus: [http://localhost:3000/metrics](http://localhost:3000/metrics)
+- Métricas Prometheus: [http://localhost:3000/api/metrics](http://localhost:3000/api/metrics)
 
 ## Observabilidade
 
