@@ -4,12 +4,17 @@ import {
   BadRequestException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { CreateTransactionInput } from '../interfaces/create-transaction.interface';
+import {
+  CreateTransactionInput,
+  CreateTransactionOutput,
+} from '../types/create-transaction.type';
 
 export class CreateTransactionUseCase {
   constructor(private readonly transactionRepository: TransactionRepository) {}
 
-  async execute(input: CreateTransactionInput): Promise<void> {
+  async execute(
+    input: CreateTransactionInput,
+  ): Promise<CreateTransactionOutput> {
     let date: Date;
     try {
       date = new Date(input.timestamp);
@@ -33,5 +38,9 @@ export class CreateTransactionUseCase {
       throw err;
     }
     await this.transactionRepository.add(transaction);
+    return {
+      amount: transaction.getAmount(),
+      timestamp: transaction.getTimestamp().toISOString(),
+    };
   }
 }
