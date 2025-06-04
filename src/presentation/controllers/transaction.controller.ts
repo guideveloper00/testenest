@@ -35,8 +35,7 @@ export class TransactionController {
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() dto: CreateTransactionDto) {
-    await this.transactionAdapter.createTransaction(dto);
-    return;
+    return await this.transactionAdapter.createTransaction(dto);
   }
 
   @Delete()

@@ -19,14 +19,15 @@ export class TransactionAdapter {
     );
   }
 
-  async createTransaction(dto: CreateTransactionDto): Promise<void> {
-    await this.createTransactionUseCase.execute({
+  async createTransaction(dto: CreateTransactionDto) {
+    const result = await this.createTransactionUseCase.execute({
       amount: dto.amount,
       timestamp: dto.timestamp,
     });
 
     const stats = await this.statisticsAdapter.getStatistics();
     this.statisticsGateway.sendStatisticsUpdate(stats);
+    return result;
   }
 
   async deleteAllTransactions(): Promise<void> {
