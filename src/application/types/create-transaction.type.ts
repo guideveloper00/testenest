@@ -6,5 +6,5 @@ export type ICreateTransactionInput = {
 export type ICreateTransactionOutput = {
   amount: number;
   timestamp: string;
-  id: string;
+  uuid: string;
 };

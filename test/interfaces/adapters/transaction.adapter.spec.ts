@@ -34,7 +34,7 @@ describe('TransactionAdapter', () => {
     expect(result).toMatchObject({
       amount: 100,
       timestamp: expect.any(String),
-      id: expect.any(String),
+      uuid: expect.any(String),
     });
     const all = await repo.findAll();
     expect(all.length).toBe(1);
