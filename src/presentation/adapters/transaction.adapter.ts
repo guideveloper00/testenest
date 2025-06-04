@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { TransactionRepository } from '../../domain/repositories/transaction.repository';
 import { CreateTransactionUseCase } from '../../application/use-cases/create-transaction.use-case';
-import { CreateTransactionDto } from '../dtos/create-transaction.dto';
 import { StatisticsAdapter } from './statistics.adapter';
 import { IStatisticsGateway } from '../../infrastructure/types/statistics-gateway';
 import {
@@ -13,6 +12,7 @@ import {
   FutureTransactionError,
   InvalidTimestampError,
 } from '../../domain/errors/transaction.errors';
+import { ICreateTransactionInput } from '../../application/types/create-transaction.type';
 
 @Injectable()
 export class TransactionAdapter {
@@ -28,15 +28,11 @@ export class TransactionAdapter {
     );
   }
 
-  async createTransaction(dto: CreateTransactionDto) {
+  async createTransaction(input: ICreateTransactionInput) {
     try {
-      const timestamp =
-        typeof dto.timestamp === 'string'
-          ? new Date(dto.timestamp)
-          : dto.timestamp;
       const result = await this.createTransactionUseCase.execute({
-        amount: dto.amount,
-        timestamp,
+        amount: input.amount,
+        timestamp: input.timestamp,
       });
       await this.sendStatisticsUpdate();
       return result;

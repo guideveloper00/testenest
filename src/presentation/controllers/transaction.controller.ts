@@ -10,6 +10,7 @@ import {
 import { ApiOperation, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger';
 import { CreateTransactionDto } from '../dtos/create-transaction.dto';
 import { TransactionAdapter } from '../adapters/transaction.adapter';
+import { ICreateTransactionInput } from '../../application/types/create-transaction.type';
 
 @ApiTags('Transactions')
 @Controller('transactions')
@@ -35,7 +36,14 @@ export class TransactionController {
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() dto: CreateTransactionDto) {
-    return await this.transactionAdapter.createTransaction(dto);
+    const input: ICreateTransactionInput = {
+      amount: dto.amount,
+      timestamp:
+        typeof dto.timestamp === 'string'
+          ? new Date(dto.timestamp)
+          : dto.timestamp,
+    };
+    return await this.transactionAdapter.createTransaction(input);
   }
 
   @Delete()

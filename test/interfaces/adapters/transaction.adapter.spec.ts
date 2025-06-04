@@ -1,12 +1,12 @@
 import { InMemoryTransactionRepository } from '../../../src/infrastructure/repositories/in-memory-transaction.repository';
 import { TransactionAdapter } from '../../../src/presentation/adapters/transaction.adapter';
-import { CreateTransactionDto } from '../../../src/presentation/dtos/create-transaction.dto';
 import {
   UnprocessableEntityException,
   BadRequestException,
 } from '@nestjs/common';
 import { StatisticsAdapter } from '../../../src/presentation/adapters/statistics.adapter';
 import { StatisticsGateway } from '../../../src/infrastructure/gateways/statistics.gateway';
+import { ICreateTransactionInput } from '../../../src/application/types/create-transaction.type';
 
 describe('TransactionAdapter', () => {
   let repo: InMemoryTransactionRepository;
@@ -26,7 +26,7 @@ describe('TransactionAdapter', () => {
   });
 
   it('should add a valid transaction', async () => {
-    const dto: CreateTransactionDto = {
+    const dto: ICreateTransactionInput = {
       amount: 100,
       timestamp: new Date(),
     };
@@ -42,7 +42,7 @@ describe('TransactionAdapter', () => {
 
   it('should throw if timestamp is in the future', async () => {
     const future = new Date(Date.now() + 100000);
-    const dto: CreateTransactionDto = {
+    const dto: ICreateTransactionInput = {
       amount: 10,
       timestamp: future,
     };
@@ -62,7 +62,7 @@ describe('TransactionAdapter', () => {
   });
 
   it('should throw if timestamp is invalid', async () => {
-    const dto: CreateTransactionDto = {
+    const dto: ICreateTransactionInput = {
       amount: 10,
       timestamp: undefined as any,
     };
@@ -75,7 +75,7 @@ describe('TransactionAdapter', () => {
     await adapter.createTransaction({
       amount: 1,
       timestamp: new Date(),
-    });
+    } as ICreateTransactionInput);
     await adapter.deleteAllTransactions();
     const all = await repo.findAll();
     expect(all.length).toBe(0);
