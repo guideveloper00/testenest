@@ -1,9 +1,9 @@
-export type CreateTransactionInput = {
+export type ICreateTransactionInput = {
   amount: number;
   timestamp: Date;
 };
 
-export type CreateTransactionOutput = {
+export type ICreateTransactionOutput = {
   amount: number;
   timestamp: Date;
 };

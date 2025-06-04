@@ -6,7 +6,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { StatisticsAdapter } from '../../../src/presentation/adapters/statistics.adapter';
-import { StatisticsGateway } from '../../../src/presentation/gateways/statistics.gateway';
+import { StatisticsGateway } from '../../../src/infrastructure/gateways/statistics.gateway';
 
 describe('TransactionAdapter', () => {
   let repo: InMemoryTransactionRepository;

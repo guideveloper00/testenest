@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { StatisticsGateway } from './presentation/gateways/statistics.gateway';
+import { StatisticsGateway } from './infrastructure/gateways/statistics.gateway';
 import { TransactionAdapter } from './presentation/adapters/transaction.adapter';
 import { InMemoryTransactionRepository } from './infrastructure/repositories/in-memory-transaction.repository';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -32,7 +32,10 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
   ],
   controllers: [TransactionController, StatisticsController, HealthController],
   providers: [
-    StatisticsGateway,
+    {
+      provide: 'StatisticsGateway',
+      useClass: StatisticsGateway,
+    },
     {
       provide: 'TransactionRepository',
       useClass: InMemoryTransactionRepository,
@@ -41,7 +44,7 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
       provide: TransactionAdapter,
       useFactory: (repo, statsAdapter, statsGateway) =>
         new TransactionAdapter(repo, statsAdapter, statsGateway),
-      inject: ['TransactionRepository', StatisticsAdapter, StatisticsGateway],
+      inject: ['TransactionRepository', StatisticsAdapter, 'StatisticsGateway'],
     },
     {
       provide: StatisticsAdapter,

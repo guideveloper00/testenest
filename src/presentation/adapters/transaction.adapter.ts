@@ -6,8 +6,8 @@ import {
 import { TransactionRepository } from '../../domain/repositories/transaction.repository';
 import { CreateTransactionUseCase } from '../../application/use-cases/create-transaction.use-case';
 import { CreateTransactionDto } from '../dtos/create-transaction.dto';
-import { StatisticsGateway } from '../gateways/statistics.gateway';
 import { StatisticsAdapter } from './statistics.adapter';
+import { IStatisticsGateway } from '../../infrastructure/types/statistics-gateway';
 
 @Injectable()
 export class TransactionAdapter {
@@ -16,7 +16,7 @@ export class TransactionAdapter {
   constructor(
     private readonly transactionRepository: TransactionRepository,
     private readonly statisticsAdapter: StatisticsAdapter,
-    private readonly statisticsGateway: StatisticsGateway,
+    private readonly statisticsGateway: IStatisticsGateway,
   ) {
     this.createTransactionUseCase = new CreateTransactionUseCase(
       transactionRepository,
@@ -29,8 +29,7 @@ export class TransactionAdapter {
         amount: dto.amount,
         timestamp: dto.timestamp,
       });
-      const stats = await this.statisticsAdapter.getStatistics();
-      this.statisticsGateway.sendStatisticsUpdate(stats);
+      await this.sendStatisticsUpdate();
       return result;
     } catch (err: any) {
       if (err.message === 'Invalid amount') {
@@ -41,6 +40,11 @@ export class TransactionAdapter {
       }
       throw err;
     }
+  }
+
+  private async sendStatisticsUpdate() {
+    const stats = await this.statisticsAdapter.getStatistics();
+    this.statisticsGateway.sendStatisticsUpdate(stats);
   }
 
   async deleteAllTransactions(): Promise<void> {
