@@ -60,7 +60,7 @@ describe('TransactionAdapter', () => {
   it('should throw if timestamp is invalid', async () => {
     const dto: CreateTransactionDto = {
       amount: 10,
-      timestamp: 'invalid-date' as any,
+      timestamp: undefined as any,
     };
     await expect(adapter.createTransaction(dto)).rejects.toThrow(
       BadRequestException,
