@@ -13,11 +13,11 @@ export class Transaction {
     this.timestamp = timestamp;
   }
 
-  getAmount(): number {
+  get amountValue(): number {
     return this.amount;
   }
 
-  getTimestamp(): Date {
+  get timestampValue(): Date {
     return this.timestamp;
   }
 

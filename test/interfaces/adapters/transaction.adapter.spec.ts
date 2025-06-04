@@ -37,7 +37,7 @@ describe('TransactionAdapter', () => {
     });
     const all = await repo.findAll();
     expect(all.length).toBe(1);
-    expect(all[0].getAmount()).toBe(100);
+    expect(all[0].amountValue).toBe(100);
   });
 
   it('should throw if timestamp is in the future', async () => {

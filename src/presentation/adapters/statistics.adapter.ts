@@ -9,12 +9,12 @@ export class StatisticsAdapter {
   async getStatistics() {
     const transactions = await this.transactionRepository.findAll();
     const count = transactions.length;
-    const sum = transactions.reduce((acc, t) => acc + t.getAmount(), 0);
+    const sum = transactions.reduce((acc, t) => acc + t.amountValue, 0);
     const avg = count > 0 ? sum / count : 0;
     const min =
-      count > 0 ? Math.min(...transactions.map((t) => t.getAmount())) : 0;
+      count > 0 ? Math.min(...transactions.map((t) => t.amountValue)) : 0;
     const max =
-      count > 0 ? Math.max(...transactions.map((t) => t.getAmount())) : 0;
+      count > 0 ? Math.max(...transactions.map((t) => t.amountValue)) : 0;
     return { count, sum, avg, min, max };
   }
 }

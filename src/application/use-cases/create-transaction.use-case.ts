@@ -19,8 +19,8 @@ export class CreateTransactionUseCase {
     }
     await this.transactionRepository.add(transaction);
     return {
-      amount: transaction.getAmount(),
-      timestamp: transaction.getTimestamp(),
+      amount: transaction.amountValue,
+      timestamp: transaction.timestampValue,
     };
   }
 }

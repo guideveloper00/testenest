@@ -5,14 +5,14 @@ describe('Transaction Entity', () => {
     const amount = 100.5;
     const timestamp = new Date('2023-01-01T00:00:00Z');
     const transaction = Transaction.create(amount, timestamp);
-    expect(transaction.getAmount()).toBe(amount);
-    expect(transaction.getTimestamp()).toBe(timestamp);
+    expect(transaction.amountValue).toBe(amount);
+    expect(transaction.timestampValue).toBe(timestamp);
   });
 
   it('should update amount using updateAmount', () => {
     const transaction = Transaction.create(0, new Date());
     transaction.updateAmount(200);
-    expect(transaction.getAmount()).toBe(200);
+    expect(transaction.amountValue).toBe(200);
   });
 
   it('should throw if timestamp is in the future', () => {

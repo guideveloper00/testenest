@@ -61,8 +61,8 @@ export class TransactionAdapter {
 
   async getAllTransactions() {
     return (await this.transactionRepository.findAll()).map((t) => ({
-      amount: t.getAmount(),
-      timestamp: t.getTimestamp().toISOString(),
+      amount: t.amountValue,
+      timestamp: t.timestampValue.toISOString(),
     }));
   }
 }
