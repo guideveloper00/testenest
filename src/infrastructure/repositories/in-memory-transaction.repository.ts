@@ -5,9 +5,6 @@ export class InMemoryTransactionRepository implements TransactionRepository {
   private transactions: Transaction[] = [];
 
   async add(transaction: Transaction): Promise<void> {
-    while (this.transactions.some((t) => t.uuid === transaction.uuid)) {
-      transaction.uuid = crypto.randomUUID();
-    }
     this.transactions.push(transaction);
   }
 
