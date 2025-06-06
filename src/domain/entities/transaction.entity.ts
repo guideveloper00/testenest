@@ -32,17 +32,6 @@ export class Transaction {
     return this._timestamp;
   }
 
-  updateAmount(newAmount: number): void {
-    if (
-      typeof newAmount !== 'number' ||
-      isNaN(newAmount) ||
-      !isFinite(newAmount)
-    ) {
-      throw new InvalidAmountError();
-    }
-    this._amount = newAmount;
-  }
-
   static create(amount: number, timestamp: Date): Transaction {
     if (typeof amount !== 'number' || isNaN(amount) || !isFinite(amount)) {
       throw new InvalidAmountError();

@@ -9,12 +9,6 @@ describe('Transaction Entity', () => {
     expect(transaction.timestamp).toBe(timestamp);
   });
 
-  it('should update amount using updateAmount', () => {
-    const transaction = Transaction.create(0, new Date());
-    transaction.updateAmount(200);
-    expect(transaction.amount).toBe(200);
-  });
-
   it('should throw if timestamp is in the future', () => {
     const future = new Date(Date.now() + 100000);
     expect(() => Transaction.create(10, future)).toThrow(
